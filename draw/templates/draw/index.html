@@ -11,16 +11,22 @@
     <script type="text/javascript" src="{% static 'draw/vendor/paper/paper-full.min.js' %}"></script>
 
     <style type="text/css">
+      #vj {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+      }
     </style>
 
 </head>
 <body>
     <!-- You may change the dimensions of this canvas -->
     <canvas id="myCanvas" width="750px" height="750px" border="1px"></canvas>
-
+    <!-- img id = "vj" src="{% static '/images/a_3d_vj.jpg' %}" -->
 </body>
 <script>
-
+    
     // setting up the canvas and one paper tool
 
     var canvas = document.getElementById('myCanvas');
@@ -71,17 +77,17 @@
 }
   
 
-//       window.addEventListener('devicemotion', function(event) {
-// //         setTimeout( 3*1000);
-//         console.log("asdsad");
+       window.addEventListener('devicemotion', function(event) {
+       setTimeout( 3*1000);
+       console.log("asdsad");
 
-//                 var r = event.rotationRate.alpha;
-//           if(r>3){
-//                                 while(paths.length>0){
-//                 paths.pop().remove();
-//               }
-//           }        
-//               });
+       var r = event.rotationRate.alpha;
+       if(r>100){
+               while(paths.length>0) {
+               paths.pop().remove();
+         }
+        }        
+        });
   
       window.addEventListener('devicemotion', function(event) {
           console.log(event.acceleration.x + ' m/s2');
@@ -127,9 +133,9 @@
     // triggered when receiving a message from the server
     socket.onmessage = function(receivedMessage) {
       var msg = JSON.parse(receivedMessage.data);
-      if(msg.type == "message"){
+      if (msg.type == "message") {
        console.log(msg.id);
-      }else if(msg.type == "draw" && url == largeUrl){
+      } else if (msg.type == "draw" && url == largeUrl) {
         console.log(msg.clientID);
 
         pathA = new paper.Path();     
@@ -152,6 +158,48 @@
         console.error('Chat socket closed unexpectedly');
     };
 
+    
+  
+   // custom interaction starts here
+   /*
+    var url = window.location.href;
+    var smallUrl = "http://p4-kenchiu100-kenchiu515417.codeanyapp.com:8000/draw/?size=small";
+    var largeUrl = "http://p4-kenchiu100-kenchiu515417.codeanyapp.com:8000/draw/?size=large";
+    var socket = new WebSocket('ws://p4-kenchiu100-kenchiu515417.codeanyapp.com:8765');
+      socket.onopen = function (event) {
+     
+        var msg = {
+          type: "message",
+        };
+      socket.send(JSON.stringify(msg));
+    };
+  
 
+    $("#vj").click(function() {
+      console.log("clicked");
+      let msg = {
+        type: "visual",
+      }
+      socket.send(JSON.stringify(msg));
+    });
+    
+     var body = document.getElementsByTagName('body')[0];
+
+    socket.onmessage = function(receivedMessage) {
+      var msg = JSON.parse(receivedMessage.data);
+      if (msg.type == "visual" && url == largeUrl) {
+      console.log(msg.id);
+      $("#vj").hide();
+      $("body").css("background-image", "url(/static/images/maxresdefault.jpg)");
+      $("body").css("display", "block");
+      $("body").css("margin-left", "auto");
+      $("body").css("margin-right", "auto");
+      $("body").css("width", "50%");
+      console.log("visual activated");
+      */
+      }
+    };
+  
+  
 </script>
 </html>
